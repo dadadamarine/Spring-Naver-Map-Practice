@@ -20,9 +20,16 @@ public class Image {
     @GeneratedValue
     private Long id;
 
+
+    @Column(nullable = false)
+    private String name;
+
     @Column(nullable = false)
     @Lob
     private String content;
+
+    @Embedded
+    private Location location;
 
     @Column
     @ManyToMany(fetch = FetchType.EAGER,
@@ -36,4 +43,16 @@ public class Image {
             inverseJoinColumns = {@JoinColumn(name = "tag_id")})
     private Set<ImageTag> imageTags = new HashSet<>();
 
+    public Image(String name, String content, Location location) {
+        this.name = name;
+        this.content = content;
+        this.location = location;
+    }
+
+    public Image(Long id, String name, String content, Location location) {
+        this.id = id;
+        this.name = name;
+        this.content = content;
+        this.location = location;
+    }
 }
