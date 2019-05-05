@@ -8,6 +8,8 @@ import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.http.*;
 import org.springframework.test.context.junit4.SpringRunner;
 
+import java.util.Objects;
+
 @RunWith(SpringRunner.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 public abstract class AcceptanceTest {
@@ -23,9 +25,9 @@ public abstract class AcceptanceTest {
     }
 
     protected String createResoure(String uri, Object bodyPayLoad){
-        return sendPost(uri, bodyPayLoad, String.class)
+        return Objects.requireNonNull(sendPost(uri, bodyPayLoad, String.class)
                 .getHeaders()
-                .getLocation()
+                .getLocation())
                 .getPath();
     }
 
