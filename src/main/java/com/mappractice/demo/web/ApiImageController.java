@@ -8,10 +8,9 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.net.URI;
 
 @RestController
 @RequestMapping("/api/image")
@@ -26,7 +25,13 @@ public class ApiImageController {
 
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
+        headers.setLocation(URI.create("/api/image/"+image.getId()));
         return new ResponseEntity<>(image, headers, HttpStatus.CREATED);
+    }
+
+    @DeleteMapping("/{id}")
+    public Image delete(@PathVariable Long id){
+        return imageService.delete(id);
     }
 
 

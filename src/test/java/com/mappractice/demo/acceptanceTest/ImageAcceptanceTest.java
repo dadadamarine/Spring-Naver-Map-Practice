@@ -20,7 +20,7 @@ public class ImageAcceptanceTest extends AcceptanceTest {
         ImageDTO imageDTO = new ImageDTO("테스트 이미지", "12kl312nlk3", "12.1234567", "12.1234566");
         ResponseEntity<Image> responseEntity = sendPost(API_IMAGE_URI, imageDTO, Image.class);
         assertThat(responseEntity.getBody().getName()).isEqualTo("테스트 이미지");
-    }
+}
 
     @Test
     public void 이미지_리스트_가져오기_API_테스트_성공() {

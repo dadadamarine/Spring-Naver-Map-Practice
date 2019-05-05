@@ -22,7 +22,9 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.isA;
 import static org.mockito.Mockito.when;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 
 @RunWith(MockitoJUnitRunner.class)
@@ -49,7 +51,7 @@ public class ApiImageControllerTest {
     }
 
     @Test
-    public void create_테스트_성공() throws Exception {
+    public void create_성공() throws Exception {
         //given
         Image image = new Image(1L, "테스트 이미지", "12kl312nlk3", new Location("12.1234567", "12.1234566"));
         ImageDTO imageDTO = new ImageDTO("테스트 이미지", "12kl312nlk3", "12.1234567", "12.1234566");
@@ -59,11 +61,26 @@ public class ApiImageControllerTest {
         MockHttpServletResponse response =
                 mockMvc.perform(post(API_IMAGE_URI)
                         .contentType(MediaType.APPLICATION_JSON)
-                .content(jsonImageDTO.write(imageDTO).getJson()))
+                        .content(jsonImageDTO.write(imageDTO).getJson()))
                         .andReturn().getResponse();
         //then
         log.debug(response.getContentAsString());
         assertThat(response.getStatus()).isEqualTo(HttpStatus.CREATED.value());
+    }
+
+    @Test
+    public void delete_성공() throws Exception {
+        //given
+        Image image = new Image(1L, "테스트 이미지", "12kl312nlk3", new Location("12.1234567", "12.1234566"));
+        when(imageService.delete(isA(Long.class))).thenReturn(image);
+
+        //when
+        MockHttpServletResponse response =
+                mockMvc.perform(delete(API_IMAGE_URI+"/{id}",1))
+                        .andReturn().getResponse();
+        //then
+        log.debug(response.getContentAsString());
+        assertThat(response.getStatus()).isEqualTo(HttpStatus.OK.value());
     }
 
 }
