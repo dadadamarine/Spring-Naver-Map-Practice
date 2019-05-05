@@ -55,4 +55,11 @@ public class Image {
         this.content = content;
         this.location = location;
     }
+
+    public Image(ImageDTO imageDTO){
+        this.name=imageDTO.getName();
+        this.content = imageDTO.getContent();
+        Location inputedlocation = new Location(imageDTO.getXIndex(), imageDTO.getYIndex());
+        this.location = inputedlocation;
+    }
 }

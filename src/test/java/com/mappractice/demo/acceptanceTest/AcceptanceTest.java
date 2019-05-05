@@ -14,9 +14,6 @@ import java.util.Objects;
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 public abstract class AcceptanceTest {
 
-    // TODO : 통합테스트를 위한 클래스 생성
-
-
     @Autowired
     private TestRestTemplate template;
 
@@ -25,7 +22,7 @@ public abstract class AcceptanceTest {
     }
 
     protected String createResoure(String uri, Object bodyPayLoad){
-        return Objects.requireNonNull(sendPost(uri, bodyPayLoad, String.class)
+        return Objects.requireNonNull(sendPost(uri, bodyPayLoad, Void.class)
                 .getHeaders()
                 .getLocation())
                 .getPath();

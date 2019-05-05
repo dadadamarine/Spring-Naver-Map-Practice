@@ -32,4 +32,8 @@ public class Location {
         this.yIndex = BigDecimal.valueOf(xIndex);
         this.yIndex = BigDecimal.valueOf(yIndex);
     }
+    public Location(BigDecimal xIndex , BigDecimal yIndex){
+        this.yIndex = xIndex;
+        this.yIndex = yIndex;
+    }
 }
