@@ -4,6 +4,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mappractice.demo.domain.Image;
 import com.mappractice.demo.domain.ImageDTO;
 import com.mappractice.demo.domain.Location;
+import com.mappractice.demo.exception.ImageNotFoundException;
+import com.mappractice.demo.exception.RestReponseEntityExceptionHandler;
 import com.mappractice.demo.service.ImageService;
 import org.junit.Before;
 import org.junit.Test;
@@ -23,6 +25,7 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.isA;
+import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -47,7 +50,9 @@ public class ApiImageControllerTest {
     public void setup(){
         JacksonTester.initFields(this , ObjectMapper::new);
 
-        mockMvc = MockMvcBuilders.standaloneSetup(apiImageController).build();
+        mockMvc = MockMvcBuilders.standaloneSetup(apiImageController)
+                .setControllerAdvice(new RestReponseEntityExceptionHandler())
+                .build();
     }
 
     @Test
@@ -81,6 +86,21 @@ public class ApiImageControllerTest {
         //then
         log.debug(response.getContentAsString());
         assertThat(response.getStatus()).isEqualTo(HttpStatus.OK.value());
+    }
+
+    @Test
+    public void delete_not_found_실패() throws Exception {
+        //given
+        Image image = new Image(1L, "테스트 이미지", "12kl312nlk3", new Location("12.1234567", "12.1234566"));
+        doThrow(new ImageNotFoundException()).when(imageService).delete(isA(Long.class));
+
+        //when
+        MockHttpServletResponse response =
+                mockMvc.perform(delete(API_IMAGE_URI+"/{id}",1))
+                        .andReturn().getResponse();
+        //then
+        log.debug(response.getContentAsString());
+        assertThat(response.getStatus()).isEqualTo(HttpStatus.BAD_REQUEST.value());
     }
 
 }
