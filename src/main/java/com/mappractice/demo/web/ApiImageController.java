@@ -19,10 +19,13 @@ public class ApiImageController {
     @Autowired
     private ImageService imageService;
 
+    @GetMapping("")
+    public String get(){
+        return "a";
+    }
     @PostMapping("")
-    public ResponseEntity<Image> create(@RequestBody ImageDTO imageDTO){
+    public ResponseEntity<Image> create(@ModelAttribute ImageDTO imageDTO){
         Image image = imageService.create(imageDTO);
-
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
         headers.setLocation(URI.create("/api/image/"+image.getId()));
