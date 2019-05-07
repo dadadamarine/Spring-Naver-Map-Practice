@@ -7,6 +7,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.http.*;
 import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.util.MultiValueMap;
 
 import java.util.Objects;
 
@@ -39,6 +40,13 @@ public abstract class AcceptanceTest {
     protected <T> ResponseEntity<T> sendDelete(String uri, Class<T> responseType){
         return template().exchange(uri, HttpMethod.DELETE, createHttpEntity(null), responseType);
 
+    }
+
+    protected <T> ResponseEntity<T> sendFile(String uri, MultiValueMap body, Class<T> responseType){
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.MULTIPART_FORM_DATA);
+        HttpEntity<MultiValueMap<String, Object>> entity = new HttpEntity<MultiValueMap<String, Object>>(body, headers);
+        return template().exchange(uri, HttpMethod.POST, entity, responseType, "");
     }
 
     private HttpEntity<Object> createHttpEntity(Object body) {

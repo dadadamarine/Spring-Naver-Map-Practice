@@ -1,4 +1,4 @@
-package com.mappractice.demo.domain;
+package com.mappractice.demo.domain.dto;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -7,7 +7,6 @@ import lombok.ToString;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.constraints.NotEmpty;
-import javax.validation.constraints.NotNull;
 
 @Getter
 @Setter
@@ -21,17 +20,8 @@ public class ImageDTO {
     @NotEmpty
     private MultipartFile content;
 
-    @NotNull
-    private String xIndex;
-
-    @NotNull
-    private String yIndex;
-
-    public ImageDTO(String name, MultipartFile content,String xIndex,String yIndex) {
+    public ImageDTO(String name, MultipartFile content) {
         this.name = name;
         this.content = content;
-        this.xIndex = xIndex;
-        this.yIndex = yIndex;
-
     }
 }

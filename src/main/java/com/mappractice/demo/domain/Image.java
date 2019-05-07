@@ -1,5 +1,6 @@
 package com.mappractice.demo.domain;
 
+import com.mappractice.demo.domain.dto.PositionedImageDTO;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -57,14 +58,14 @@ public class Image {
         this.location = location;
     }
 
-    public Image(ImageDTO imageDTO) {
-        this.name=imageDTO.getName();
+    public Image(PositionedImageDTO positionedImageDTO) {
+        this.name= positionedImageDTO.getFileName();
         try {
-            this.content = imageDTO.getContent().getBytes();
+            this.content = positionedImageDTO.getFile().getBytes();
         } catch (IOException e) {
             e.printStackTrace();
         }
-        Location inputedlocation = new Location(imageDTO.getXIndex(), imageDTO.getYIndex());
+        Location inputedlocation = new Location(positionedImageDTO.getXIndex(), positionedImageDTO.getYIndex());
         this.location = inputedlocation;
     }
 }
