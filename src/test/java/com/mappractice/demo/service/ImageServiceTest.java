@@ -1,7 +1,7 @@
 package com.mappractice.demo.service;
 
 import com.mappractice.demo.domain.Image;
-import com.mappractice.demo.domain.ImageDTO;
+import com.mappractice.demo.domain.dto.PositionedImageDTO;
 import com.mappractice.demo.domain.ImageRepository;
 import com.mappractice.demo.domain.Location;
 import org.junit.Test;
@@ -9,6 +9,7 @@ import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
+import org.springframework.mock.web.MockMultipartFile;
 
 import java.util.Optional;
 
@@ -27,15 +28,18 @@ public class ImageServiceTest {
     @InjectMocks
     private ImageService imageService;
 
+    private static MockMultipartFile imageFile = new MockMultipartFile("name","ded.png","image/png", "data".getBytes());
+    private static Image image = new Image(1L, "테스트 이미지", "12kl312nlk3".getBytes(), new Location("12.1234567", "12.1234566"));
+    private static PositionedImageDTO positionedImageDTO = new PositionedImageDTO("테스트 이미지", imageFile, "12.1234567", "12.1234566");
+
     @Test
     public void create_성공() {
         //given
-        ImageDTO imageDTO = new ImageDTO("테스트 이미지", "12kl312nlk3", "12.1234567", "12.1234566");
-        Image image = new Image(imageDTO);
-        Image savedImage = new Image(imageDTO);
+        Image image = new Image(positionedImageDTO);
+        Image savedImage = new Image(positionedImageDTO);
         when(imageRepository.save(any(Image.class))).thenReturn(savedImage);
         //when
-        Image createdImage = imageService.create(imageDTO);
+        Image createdImage = imageService.create(positionedImageDTO);
         //then
         assertThat(createdImage.getName()).isEqualTo("테스트 이미지");
     }
@@ -43,7 +47,6 @@ public class ImageServiceTest {
     @Test
     public void delete_성공() {
         //given
-        Image image = new Image(1L, "테스트 이미지", "12kl312nlk3", new Location("12.1234567", "12.1234566"));
         when(imageRepository.findById(1l)).thenReturn(Optional.of(image));
         doNothing().when(imageRepository).delete(isA(Image.class));
         //when
