@@ -22,8 +22,8 @@ public abstract class AcceptanceTest {
         return this.template;
     }
 
-    protected String createResoure(String uri, Object bodyPayLoad){
-        return Objects.requireNonNull(sendPost(uri, bodyPayLoad, Void.class)
+    protected String createResoure(String uri, MultiValueMap bodyPayLoad){
+        return Objects.requireNonNull(sendFile(uri, bodyPayLoad, String.class)
                 .getHeaders()
                 .getLocation())
                 .getPath();

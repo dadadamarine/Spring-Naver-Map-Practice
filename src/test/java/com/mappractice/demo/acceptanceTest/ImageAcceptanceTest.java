@@ -7,7 +7,6 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 
@@ -18,13 +17,13 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class ImageAcceptanceTest extends AcceptanceTest {
     private static final String API_IMAGE_URI = "/api/image";
 
-    private static MockMultipartFile content;
+    private static CustomMultipartFile content;
     private static Image image;
     private static PositionedImageDTO positionedImageDTO;
 
     @BeforeClass
-    public static void init(){
-        content = new MockMultipartFile("name",
+    public static void init() {
+        content = new CustomMultipartFile("file",
                 "ded.png",
                 "image/png",
                 "datdedadsdwdssdwa".getBytes()
@@ -47,8 +46,13 @@ public class ImageAcceptanceTest extends AcceptanceTest {
 
     @Test
     public void 이미지_리스트_가져오기_API_성공() {
+        MultiValueMap<String, Object> parameters = new LinkedMultiValueMap<String, Object>();
+        parameters.add("fileName", "테스트 이미지");
+        parameters.add("file", content);
+        parameters.add("xIndex", "123");
+        parameters.add("yIndex", "454");
         //given
-        String location = createResoure(API_IMAGE_URI, positionedImageDTO);
+        String location = createResoure(API_IMAGE_URI, parameters);
         //when
         ResponseEntity<List> responseEntity = sendGet(API_IMAGE_URI, List.class);
         //then
@@ -57,8 +61,13 @@ public class ImageAcceptanceTest extends AcceptanceTest {
 
     @Test
     public void 이미지_삭제_API_성공() {
+        MultiValueMap<String, Object> parameters = new LinkedMultiValueMap<String, Object>();
+        parameters.add("fileName", "테스트 이미지");
+        parameters.add("file", content);
+        parameters.add("xIndex", "123");
+        parameters.add("yIndex", "454");
         //given
-        String location = createResoure(API_IMAGE_URI, positionedImageDTO);
+        String location = createResoure(API_IMAGE_URI, parameters);
         //when
         ResponseEntity<String> responseEntity = sendDelete(location, String.class);
         //then
